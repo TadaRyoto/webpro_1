@@ -10,4 +10,3 @@
 4. `npm install` を実行する
 5. `node main.mjs` で実行
 6. `http://localhost:3000/` を開く
-//test
