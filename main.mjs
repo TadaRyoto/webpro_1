@@ -7,7 +7,6 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("static"));
 const prisma = new PrismaClient();
-
 const indexTemplate = fs.readFileSync("./templates/index.html", "utf-8");
 app.get("/", async (request, response) => {
   const cards = await prisma.card.findMany();
@@ -19,6 +18,7 @@ app.get("/", async (request, response) => {
           <tr>
             <td>${escapeHTML(card.question)}</td>
             <td>${escapeHTML(card.answer)}</td>
+            <td>${escapeHTML(card.explanation !== "" ? card.explanation : "解説はございません")}</td>
             <td>
               <form action="/delete" method="post">
                 <input type="hidden" name="id" value="${card.id}" />
@@ -63,7 +63,7 @@ app.get("/exercise", async (request, response) => {
 
 app.post("/create", async (request, response) => {
   await prisma.card.create({
-    data: { question: request.body.question, answer: request.body.answer },
+    data: { question: request.body.question, answer: request.body.answer,explanation: request.body.explanation},
   });
   response.redirect("/");
 });
@@ -74,3 +74,4 @@ app.post("/delete", async (request, response) => {
 });
 
 app.listen(3000);
+console.log(process.env.DATABASE_URL);
