@@ -19,6 +19,7 @@ app.get("/", async (request, response) => {
           <tr>
             <td>${escapeHTML(card.question)}</td>
             <td>${escapeHTML(card.answer)}</td>
+            <td>${escapeHTML(card.explanation)}</td>
             <td>
               <form action="/delete" method="post">
                 <input type="hidden" name="id" value="${card.id}" />
@@ -57,13 +58,14 @@ app.get("/exercise", async (request, response) => {
   const html = exerciseTemplate
     .replace("<!-- question -->", card.question)
     .replace("<!-- answer -->", card.answer)
+    .replace("<!-- explantion -->", card.explanation)
     .replace("<!-- controls -->", controlsHtml);
   response.send(html);
 });
 
 app.post("/create", async (request, response) => {
   await prisma.card.create({
-    data: { question: request.body.question, answer: request.body.answer },
+  data: { question: request.body.question, answer: request.body.answer, explanation: request.body.explanation },
   });
   response.redirect("/");
 });
