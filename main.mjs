@@ -7,7 +7,6 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("static"));
 const prisma = new PrismaClient();
-
 const indexTemplate = fs.readFileSync("./templates/index.html", "utf-8");
 app.get("/", async (request, response) => {
   const cards = await prisma.card.findMany();
@@ -19,6 +18,7 @@ app.get("/", async (request, response) => {
           <tr>
             <td>${escapeHTML(card.question)}</td>
             <td>${escapeHTML(card.answer)}</td>
+            <td>${escapeHTML(card.explanation !== undefined ? card.explanation : "解説はございません")}</td>
             <td>
               <form action="/delete" method="post">
                 <input type="hidden" name="id" value="${card.id}" />
@@ -74,3 +74,4 @@ app.post("/delete", async (request, response) => {
 });
 
 app.listen(3000);
+console.log(process.env.DATABASE_URL);
