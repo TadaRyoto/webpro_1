@@ -65,7 +65,7 @@ app.get("/exercise", async (request, response) => {
 
 app.post("/create", async (request, response) => {
   await prisma.card.create({
-  data: { question: request.body.question, answer: request.body.answer, explanation: request.body.explanation },
+  data: { question: request.body.question, answer: request.body.answer, explanation: request.body.explanation},
   });
   response.redirect("/");
 });
